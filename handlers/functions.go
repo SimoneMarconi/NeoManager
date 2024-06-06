@@ -14,7 +14,7 @@ func Install(v interface{}){
     if _, err := os.Stat(dir); os.IsNotExist(err){
         fmt.Println("NeoManager needs to be initiated, run NeoManager init")
     }
-    Build(v)
+    build(v)
 }
 
 func Change(v interface{}){
@@ -61,7 +61,6 @@ func Change(v interface{}){
 }
 
 func ChangeRepo(v string){
-    // version := fmt.Sprintf("v0.%d.0", v)
     checkout := exec.Command("git", "checkout", v)
     checkout.Dir = "source"
 
@@ -78,7 +77,7 @@ func ChangeRepo(v string){
 func Testing(){
 }
 
-func Build(v interface{}){
+func build(v interface{}){
     dir := "/home/simone/.NeoManager"
     var ans string
     if _, err := os.Stat(dir); os.IsNotExist(err){
@@ -144,10 +143,10 @@ func Build(v interface{}){
         log.Println(string(out))
         log.Panic("Make error")
     }
-    ticker.Stop()
+    ticker.Reset(2 * time.Second)
     fmt.Print("\x1bc")
     fmt.Println("Successfull build")
-    fmt.Println("Installing")
+    go StartInstalling(ticker)
     home, errHome:= os.UserHomeDir()
     if errHome != nil{
         log.Panic("Home Error")
@@ -161,7 +160,8 @@ func Build(v interface{}){
         log.Println(string(out))
         log.Panic("Install Error")
     }
-    fmt.Println("Install finished")
+    fmt.Println("Installation finished")
+    ticker.Stop()
     //copying the compiled exe to the local bin directory
     exe := versionPath + "/bin/nvim"
     destination := home + "/.local/bin"
