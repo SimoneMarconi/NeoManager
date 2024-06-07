@@ -78,20 +78,21 @@ func Testing(){
 }
 
 func build(v interface{}){
-    dir := "/home/simone/.NeoManager"
+    home, _:= os.UserHomeDir()
+    dir := home + "/.NeoManager"
     var ans string
     if _, err := os.Stat(dir); os.IsNotExist(err){
         fmt.Println("Directory .NeoManager not found, create it? (y/n)")
         fmt.Scan(&ans)
         if ans == "y"{
             mkdir := exec.Command("mkdir", ".NeoManager")
-            mkdir.Dir = "/home/simone"
+            mkdir.Dir = home
             err1 := mkdir.Run()
             if err1 != nil {
                 fmt.Println(err)
             }
             vFolder:= exec.Command("mkdir", "versions")
-            vFolder.Dir = "/home/simone/.NeoManager"
+            vFolder.Dir = dir
             err2 := vFolder.Run()
             if err2 != nil {
                 log.Panic("Error creating versions directory")
@@ -113,7 +114,7 @@ func build(v interface{}){
         vName = v.(string)
     }
     //checking if the version is already installed
-    verify := "/home/simone/.NeoManager/versions/" + vName
+    verify := home + "/.NeoManager/versions/" + vName
     if _, err := os.Stat(verify); err == nil{
         checkBin := verify + "/bin"
         if _, err := os.Stat(checkBin); err == nil{
@@ -122,7 +123,7 @@ func build(v interface{}){
         }
     }
         dBuild := exec.Command("mkdir", vName)
-        dBuild.Dir = "/home/simone/.NeoManager/versions"
+        dBuild.Dir = home + "/.NeoManager/versions"
         err := dBuild.Run()
         if err != nil {
             log.Panic(err)
