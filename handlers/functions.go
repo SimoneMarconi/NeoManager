@@ -130,8 +130,8 @@ func build(v interface{}){
     }
     //changing repo to execute the right build
     ChangeRepo(vName)
-    ticker := time.NewTicker(500 * time.Millisecond)
-    go StartBuilding(ticker)
+    buildTicker := time.NewTicker(500 * time.Millisecond)
+    go StartBuilding(buildTicker)
     cBuild := exec.Command("make", "CMAKE_BUILD_TYPE=RelWithDebInfo")
     wd, errWd:= os.Getwd()
     if errWd != nil {
@@ -144,10 +144,11 @@ func build(v interface{}){
         log.Println(string(out))
         log.Panic("Make error")
     }
-    ticker.Reset(2 * time.Second)
+    buildTicker.Stop()
+    installTicker := time.NewTicker(500 * time.Millisecond)
     fmt.Print("\x1bc")
     fmt.Println("Successfull build")
-    go StartInstalling(ticker)
+    go StartInstalling(installTicker)
     home, errHome:= os.UserHomeDir()
     if errHome != nil{
         log.Panic("Home Error")
@@ -162,7 +163,7 @@ func build(v interface{}){
         log.Panic("Install Error")
     }
     fmt.Println("Installation finished")
-    ticker.Stop()
+    installTicker.Stop()
     //copying the compiled exe to the local bin directory
     exe := versionPath + "/bin/nvim"
     destination := home + "/.local/bin"
