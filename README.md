@@ -50,17 +50,3 @@ To switch to a different installed version of NeoVim, use the `change` command f
     
     NeoManager change 10
 
-
-## Contributing
-
-We welcome contributions! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
-
-## Contact
-
-For any questions or suggestions, feel free to open an issue or contact us at [your-email@example.com](mailto:your-email@example.com).
-
-Happy coding!
