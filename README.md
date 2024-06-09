@@ -28,7 +28,6 @@ To get started with NeoManager, follow these steps:
 ### Initialize NeoManager
 
 Before you can use NeoManager, you need to initialize it. Run the following command:
-
     ```sh
     NeoManager init
     ```
@@ -38,7 +37,6 @@ This command sets up the necessary environment for NeoManager to manage your Neo
 ### Install a NeoVim Version
 
 To install a specific version of NeoVim, use the `install` command followed by the version number. For example, to install version `0.5.0`:
-
     ```sh
     NeoManager install 0.5.0
     ```
@@ -46,7 +44,6 @@ To install a specific version of NeoVim, use the `install` command followed by t
 ### Change NeoVim Version
 
 To switch to a different installed version of NeoVim, use the `change` command followed by the version number. For example, to change to version `0.5.0`:
-
     ```sh
     NeoManager change 0.5.0
     ```
