@@ -72,9 +72,6 @@ func ChangeRepo(v string){
     fmt.Println(string(output))
 }
 
-func Testing(){
-}
-
 func build(v interface{}){
     home, _:= os.UserHomeDir()
     dir := home + "/.NeoManager"
@@ -140,6 +137,7 @@ func build(v interface{}){
     out, errMake := cBuild.CombinedOutput()
     if errMake != nil{
         log.Println(string(out))
+        remove(vName)
         log.Panic("Make error")
     }
     buildTicker.Stop()
@@ -224,4 +222,14 @@ func Update(){
         log.Panic("Could not Pull Neovim repository")
     }
     fmt.Println(string(out))
+}
+
+func remove(v string){
+    home, _ := os.UserHomeDir()
+    rm := exec.Command("rm", "-rf", v) 
+    rm.Dir = home + "/.NeoManager/versions/"
+    rmErr := rm.Run()
+    if rmErr != nil{
+        log.Panic("Rm Error")
+    }
 }

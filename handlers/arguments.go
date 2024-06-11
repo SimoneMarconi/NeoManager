@@ -44,9 +44,6 @@ func CommandHandle(command []string){
     case "update":
         Update()
         break
-    case "testing":
-        Testing()
-        break
     default:
         fmt.Println("Command Not Found")
     }
