@@ -56,8 +56,6 @@ func Change(v interface{}){
         fmt.Printf("Error listing files: %s\n", err)
         return
     }
-
-    fmt.Println(string(output))
 }
 
 func ChangeRepo(v string){
@@ -208,4 +206,22 @@ func Init(){
     }else{
         fmt.Println("NeoManager was already initialized")
     }
+}
+
+func Update(){
+    wd, _:= os.Getwd()
+    dir := wd + "/source"
+    checkout := exec.Command("git", "checkout", "master")
+    checkout.Dir = dir
+    errCheckout := checkout.Run()
+    if errCheckout != nil {
+        log.Panic("Could not checkout master")
+    }
+    pull := exec.Command("git", "pull")
+    pull.Dir = dir
+    out, errPull := pull.CombinedOutput()
+    if errPull != nil{
+        log.Panic("Could not Pull Neovim repository")
+    }
+    fmt.Println(string(out))
 }

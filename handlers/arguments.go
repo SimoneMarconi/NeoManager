@@ -41,6 +41,9 @@ func CommandHandle(command []string){
     case "init":
         Init()
         break
+    case "update":
+        Update()
+        break
     case "testing":
         Testing()
         break
