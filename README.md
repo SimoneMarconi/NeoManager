@@ -14,7 +14,7 @@ To get started with NeoManager, follow these steps:
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/yourusername/neomanager.git
+    git clone https://github.com/SimoneMarconi/NeoManager
     cd neomanager
     ```
 
