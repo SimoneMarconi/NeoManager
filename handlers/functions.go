@@ -126,7 +126,7 @@ func build(v interface{}){
     //changing repo to execute the right build
     ChangeRepo(vName)
     buildTicker := time.NewTicker(500 * time.Millisecond)
-    go StartBuilding(buildTicker)
+    go StartLoading(buildTicker, "Building")
     cBuild := exec.Command("make", "CMAKE_BUILD_TYPE=RelWithDebInfo")
     wd, errWd:= os.Getwd()
     if errWd != nil {
@@ -144,7 +144,7 @@ func build(v interface{}){
     installTicker := time.NewTicker(500 * time.Millisecond)
     fmt.Print("\x1bc")
     fmt.Println("Successfull build")
-    go StartInstalling(installTicker)
+    go StartLoading(installTicker, "Loading")
     home, errHome:= os.UserHomeDir()
     if errHome != nil{
         log.Panic("Home Error")

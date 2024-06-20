@@ -5,29 +5,15 @@ import (
     "fmt"
 )
 
-func StartBuilding(ticker *time.Ticker){
-    loadings := []string{"|", "/", "-", "|", "/", "-"}
+func StartLoading(ticker *time.Ticker, msg string){
+    loadings := []string{"|", "/", "-", "\\"}
     iter := 0
     for {
         select{
         case <- ticker.C:
             fmt.Printf("\x1bc")
-            fmt.Print("Building" + loadings[iter])
-        iter = (iter + 1) % 6
+            fmt.Print(msg + " " + loadings[iter])
+        iter = (iter + 1) % len(loadings)
         }
     }
 }
-
-func StartInstalling(ticker *time.Ticker){
-    loadings := []string{"|", "/", "-", "|", "/", "-"}
-    iter := 0
-    for {
-        select{
-        case <- ticker.C:
-            fmt.Printf("\x1bc")
-            fmt.Print("Installing" + loadings[iter])
-        iter = (iter + 1) % 6
-        }
-    }
-}
-
