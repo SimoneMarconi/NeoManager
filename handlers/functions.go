@@ -65,7 +65,7 @@ func ChangeRepo(v string){
 	output, err := checkout.CombinedOutput()
 
 	if err != nil {
-		fmt.Printf("Error changing Repository\n")
+        fmt.Printf("Error changing Repository\nErr:%s\n", err)
 		return
 	}
 
@@ -82,14 +82,14 @@ func build(v interface{}){
         if ans == "y"{
             mkdir := exec.Command("mkdir", ".NeoManager")
             mkdir.Dir = home
-            err1 := mkdir.Run()
-            if err1 != nil {
+            err := mkdir.Run()
+            if err != nil {
                 fmt.Println(err)
             }
             vFolder:= exec.Command("mkdir", "versions")
             vFolder.Dir = dir
-            err2 := vFolder.Run()
-            if err2 != nil {
+            err = vFolder.Run()
+            if err != nil {
                 log.Panic("Error creating versions directory")
             }
         }else{
@@ -185,6 +185,7 @@ func List(){
     fmt.Println(string(out))
 }
 
+//add loading animation
 func Init(){
     wd, _:= os.Getwd()
     dir := wd + "/source"
