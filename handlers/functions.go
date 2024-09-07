@@ -29,10 +29,10 @@ func Change(v interface{}){
     }
     home, errHome:= os.UserHomeDir()
     if errHome != nil{
-        log.Panic("Home not found")
+        log.Fatal("Home not found")
     }
     dir := home + "/.NeoManager/versions/" + version
-    log.Println(dir)
+    // log.Println("Change: ", dir)
 
     if _, err := os.Stat(dir); os.IsNotExist(err){
         fmt.Println("Version not found")
@@ -44,16 +44,15 @@ func Change(v interface{}){
     out, errCp := cp.CombinedOutput()
     if errCp != nil{
         log.Println(string(out))
-        log.Panic("Cp Error")
+        log.Fatal("Cp Error")
     }
     checkout := exec.Command("git", "checkout", version)
     checkout.Dir = "source"
 
-    output, err := checkout.CombinedOutput()
+    _, err := checkout.CombinedOutput()
 
     if err != nil {
-        log.Panic(string(output))
-        fmt.Printf("Error listing files: %s\n", err)
+        log.Fatal("Version not found")
         return
     }
 }
@@ -90,7 +89,7 @@ func build(v interface{}){
             vFolder.Dir = dir
             err = vFolder.Run()
             if err != nil {
-                log.Panic("Error creating versions directory")
+                log.Fatal("Error creating versions directory")
             }
         }else{
             fmt.Println("Aborting")
@@ -121,7 +120,7 @@ func build(v interface{}){
         dBuild.Dir = home + "/.NeoManager/versions"
         err := dBuild.Run()
         if err != nil {
-            log.Panic(err)
+            log.Fatal(err)
     }
     //changing repo to execute the right build
     ChangeRepo(vName)
@@ -130,7 +129,7 @@ func build(v interface{}){
     cBuild := exec.Command("make", "CMAKE_BUILD_TYPE=RelWithDebInfo")
     wd, errWd:= os.Getwd()
     if errWd != nil {
-        log.Panic("Error Wd")
+        log.Fatal("Error Wd")
     }
     sourceDir := wd + "/source"
     cBuild.Dir = sourceDir
@@ -138,7 +137,7 @@ func build(v interface{}){
     if errMake != nil{
         log.Println(string(out))
         remove(vName)
-        log.Panic("Make error")
+        log.Fatal("Make error")
     }
     buildTicker.Stop()
     installTicker := time.NewTicker(500 * time.Millisecond)
@@ -147,7 +146,7 @@ func build(v interface{}){
     go StartLoading(installTicker, "Loading")
     home, errHome:= os.UserHomeDir()
     if errHome != nil{
-        log.Panic("Home Error")
+        log.Fatal("Home Error")
     }
     versionPath := home + fmt.Sprintf("/.NeoManager/versions/%s", vName)
     command := "CMAKE_INSTALL_PREFIX=" + versionPath
@@ -156,8 +155,9 @@ func build(v interface{}){
     out, errInstall := cInstall.CombinedOutput()
     if errInstall != nil{
         log.Println(string(out))
-        log.Panic("Install Error")
+        log.Fatal("Install Error")
     }
+    fmt.Print("\x1bc")
     fmt.Println("Installation finished")
     installTicker.Stop()
     //copying the compiled exe to the local bin directory
@@ -167,20 +167,20 @@ func build(v interface{}){
     out, errCp := cp.CombinedOutput()
     if errCp != nil{
         log.Println(string(out))
-        log.Panic("Cp Error")
+        log.Fatal("Cp Error")
     }
 }
 
 func List(){
     home, errHome:= os.UserHomeDir()
     if errHome != nil{
-        log.Panic("Home not found")
+        log.Fatal("Home not found")
     }
     ls := exec.Command("ls")
     ls.Dir = home + "/.NeoManager/versions"
     out, errLs := ls.CombinedOutput()
     if errLs != nil{
-        log.Panic("ls did not work")
+        log.Fatal("ls did not work")
     }
     fmt.Println(string(out))
 }
@@ -196,11 +196,11 @@ func Init(){
         clone.Dir = dir
         errDir := mkdir.Run()
         if errDir != nil {
-            log.Panic("Error making source")
+            log.Fatal("Error making source")
         }
         errClone := clone.Run()
         if errClone != nil{
-            log.Panic("Error cloning repository")
+            log.Fatal("Error cloning repository")
         }
     }else{
         fmt.Println("NeoManager was already initialized")
@@ -214,13 +214,13 @@ func Update(){
     checkout.Dir = dir
     errCheckout := checkout.Run()
     if errCheckout != nil {
-        log.Panic("Could not checkout master")
+        log.Fatal("Could not checkout master")
     }
     pull := exec.Command("git", "pull")
     pull.Dir = dir
     out, errPull := pull.CombinedOutput()
     if errPull != nil{
-        log.Panic("Could not Pull Neovim repository")
+        log.Fatal("Could not Pull Neovim repository")
     }
     fmt.Println(string(out))
 }
@@ -231,6 +231,6 @@ func remove(v string){
     rm.Dir = home + "/.NeoManager/versions/"
     rmErr := rm.Run()
     if rmErr != nil{
-        log.Panic("Rm Error")
+        log.Fatal("Rm Error")
     }
 }
